@@ -46,6 +46,8 @@ risk_scores = gbm.predict(X_test)
 c_index = concordance_index_censored(y_test['PFS_STATUS'], y_test['PFS_MONTHS'], risk_scores)
 print(f"C-index: {c_index[0]:.3f}")
 
+print(f"Train C-index: {concordance_index_censored(y_train['PFS_STATUS'], y_train['PFS_MONTHS'], gbm.predict(X_train))[0]:.3f}")
+
 # implement cross-validation
 
 joblib.dump(gbm, f'gbm_model-{gbm.n_estimators}-c{c_index[0]:.3f}.pkl')
