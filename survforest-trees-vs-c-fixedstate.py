@@ -20,7 +20,7 @@ def run_trees(df, surv_data, covariates, name):
         X_train, X_test, y_train, y_test = train_test_split(df[covariates], surv_data, test_size=test_size, random_state=42)  
         
         # Fit the Random Survival Forest model with varying n_estimators
-        rsf = RandomSurvivalForest(n_estimators=n_estimators, min_samples_split=10, min_samples_leaf=5, random_state=42)
+        rsf = RandomSurvivalForest(n_estimators=n_estimators, min_samples_split=10, min_samples_leaf=8, random_state=42)
         rsf.fit(X_train, y_train)
         
         # Evaluate model performance on the training set
@@ -42,11 +42,11 @@ def run_trees(df, surv_data, covariates, name):
     plt.title(f'{name} Train and Test C-index with 95% CI vs Number of Trees - Test Size: {test_size}, Random State: 42')
     plt.legend()
     plt.grid()
-    plt.savefig(f'rsf-SMOKE-{name}-numtrees-vs-c-testsize{test_size}-iters-state42.png')
+    plt.savefig(f'rsf-{name}-numtrees-vs-c-testsize{test_size}-state42.png')
     plt.show()
 
 # Load the dataset
-df = pd.read_csv('survival-withSmoking.csv')
+df = pd.read_csv('survival.csv')
 df.drop(columns = ["PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB", "CURRENT_SMOKER", "FORMER_SMOKER", "NEVER_SMOKER"], inplace = True)
 
 # Create structured array for survival analysis

@@ -15,7 +15,7 @@ from sklearn.model_selection import cross_val_score
 # Load the dataset
 df = pd.read_csv('survival.csv')
 
-df.drop(columns = ["PACK-YEAR_HISTORY", "PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB"], inplace = True)
+df.drop(columns = ["PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB", "CURRENT_SMOKER", "FORMER_SMOKER", "NEVER_SMOKER"], inplace = True)
 
 covariates = df.columns.difference(['PFS_STATUS', 'PFS_MONTHS'])
 
@@ -30,7 +30,7 @@ X_train, X_test, y_train, y_test = train_test_split(df[covariates], surv_data, t
 gbm = GradientBoostingSurvivalAnalysis(
     loss="coxph",
     learning_rate=0.1,
-    n_estimators=80,
+    n_estimators=50,
     subsample=1.0,
     random_state=42, 
     validation_fraction=0.1,

@@ -80,13 +80,16 @@ df.columns = [col.upper().replace(' ', '_') for col in df.columns]
 # Drop those with missing PFS_MONTHS
 df = df.dropna(subset=['PFS_MONTHS'])
 
+# Drop those with missing/unknown PACK-YEAR_HISTORY (n = 7)
+df = df[~df['PACK-YEAR_HISTORY'].isin(['unk', 'NA', 'Cigars'])]
+df['PACK-YEAR_HISTORY'] = df['PACK-YEAR_HISTORY'].astype(float)
+
 # Drop those in clinical trial treatment setting
 df = df[~df['TREATMENT_SETTING'].isin(['Clinical trial'])]
 
 binary = ["ALK_DRIVER", "ARID1A_DRIVER", "BRAF_DRIVER", "EGFR_DRIVER", "ERBB2_DRIVER", "MET_DRIVER", "RET_DRIVER", "ROS1_DRIVER", "STK11_DRIVER"]
 
 parameters = binary + ["PATIENT_ID", "PFS_MONTHS", "PFS_STATUS","WHAT_IS_THE_PATIENT'S_SMOKING_STATUS?", "MONOTHERAPY_VS._COMBINATION", "SEX", "PACK-YEAR_HISTORY", "MSI_SCORE", "IO_DRUG_NAME", "FRACTION_GENOME_ALTERED", "DNLR", "IMPACT_TMB_SCORE", "CLINICALLY_REPORTED_PD-L1_SCORE", "ALBUMIN", "AGE", "ECOG"]
-
 
 print(f"Parameters: {len(parameters)}")
 
@@ -137,11 +140,3 @@ df.drop(columns=['PATIENT_ID'], inplace=True)
 
 # export to csv
 df.to_csv('survival.csv', index=False)
-
-# DROP for pack-year history: drop unk, NA, Cigars
-df = df[~df['PACK-YEAR_HISTORY'].isin(['unk', 'NA', 'Cigars'])]
-df['PACK-YEAR_HISTORY'] = df['PACK-YEAR_HISTORY'].astype(float)
-
-df.to_csv('survival-withSmoking.csv', index=False)
-
-print(df.info)

@@ -57,6 +57,6 @@ def create_rsf(df, name, trees=1000):
 
 # Without treatment data
 surv = pd.read_csv('survival.csv')
-surv.drop(columns = ["PACK-YEAR_HISTORY", "PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB"], inplace = True)
+surv.drop(columns = ["PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB", "CURRENT_SMOKER", "FORMER_SMOKER", "NEVER_SMOKER"], inplace = True)
 
-create_rsf(surv, 'MSK MIND LUAD', 250)
+create_rsf(surv, 'MSK MIND LUAD', 400)

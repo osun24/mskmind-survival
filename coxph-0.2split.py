@@ -102,12 +102,8 @@ def run_model(df, name):
 # Without treatment data
 surv = pd.read_csv('survival.csv')
 
-parameters = ["IMPACT_TMB_SCORE", "CLINICALLY_REPORTED_PD-L1_SCORE", "ALBUMIN", "DNLR", "FRACTION_GENOME_ALTERED", "EGFR_DRIVER","STK11_DRIVER"]
-
 # some unknown, some NA, some cigars
-surv.drop(columns= ["PACK-YEAR_HISTORY"], inplace=True)
-
-surv = surv[parameters + ['PFS_MONTHS', 'PFS_STATUS']]
+surv.drop(columns = ["PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB", "CURRENT_SMOKER", "FORMER_SMOKER", "NEVER_SMOKER"], inplace = True)
 
 # Drop those with low variance
-run_model(surv, 'MSK MIND LUAD - RSF Selected Parameters')
+run_model(surv, 'MSK MIND LUAD')

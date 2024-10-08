@@ -13,7 +13,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 
 def run_gbm_trees(df, surv_data, covariates, name):
-    n_estimators_list = np.linspace(10,100,25, dtype=int)
+    n_estimators_list = np.linspace(10,1000,25, dtype=int)
     
     train_c_indices = []
     test_c_indices = []
@@ -62,7 +62,7 @@ def run_gbm_trees(df, surv_data, covariates, name):
 # Load the dataset
 df = pd.read_csv('survival.csv')
 
-df.drop(columns = ["PACK-YEAR_HISTORY", "PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB"], inplace = True)
+df.drop(columns = ["PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB", "CURRENT_SMOKER", "FORMER_SMOKER", "NEVER_SMOKER"], inplace = True)
 
 covariates = df.columns.difference(['PFS_STATUS', 'PFS_MONTHS'])
 
