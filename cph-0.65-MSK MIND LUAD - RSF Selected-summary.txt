@@ -1,0 +1,13 @@
+                  coef  exp(coef)  se(coef)  coef lower 95%  coef upper 95%  exp(coef) lower 95%  exp(coef) upper 95%  cmp to         z             p   -log2(p) significance
+covariate                                                                                                                                                                    
+ALBUMIN      -1.012704   0.363236  0.200321       -1.405325       -0.620082             0.245287             0.537900     0.0 -5.055405  4.294773e-07  21.150915          ***
+EGFR_DRIVER   1.140942   3.129716  0.274607        0.602723        1.679161             1.827087             5.361059     0.0  4.154823  3.255397e-05  14.906807          ***
+ERBB2_DRIVER  0.340655   1.405868  0.295871       -0.239240        0.920551             0.787226             2.510673     0.0  1.151366  2.495818e-01   2.002415             
+
+Model metrics: -622.7062
+0.6536
+
+Concordance = 0.65
+Partial AIC = 1251.41
+log-likelihood ratio test = 37.65 on 3 df
+-log2(p) of ll-ratio test = 24.83

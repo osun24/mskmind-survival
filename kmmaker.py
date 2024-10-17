@@ -8,12 +8,19 @@ from lifelines.plotting import add_at_risk_counts
 # Load the data
 df = pd.read_csv('survival-nodummies.csv')
 
-# List of categorical covariates (excluding quantitative variables)
-categorical_covariates = ['ARID1A_DRIVER', 'BRAF_DRIVER', 'EGFR_DRIVER', 'ERBB2_DRIVER', 'MET_DRIVER',  'STK11_DRIVER', 'SMOKING_STATUS', 'IO_DRUG_NAME']
-
 # Define duration and event columns
 duration_col = 'PFS_MONTHS'
 event_col = 'PFS_STATUS'
+
+# Rename "Current smoker (within 6 months of diagnosis)" to "Current smoker"
+df['SMOKING_STATUS'] = df['SMOKING_STATUS'].replace('Current smoker (within 6 months of diagnosis)', 'Current smoker')
+
+# Rename "IO_DRUG_NAME" to "IMMUNOTHERAPY"
+df['IMMUNOTHERAPY'] = df['IO_DRUG_NAME']
+df.drop('IO_DRUG_NAME', axis=1, inplace=True)
+
+# List of categorical covariates (excluding quantitative variables)
+categorical_covariates = ['ARID1A_DRIVER', 'BRAF_DRIVER', 'EGFR_DRIVER', 'ERBB2_DRIVER', 'MET_DRIVER',  'STK11_DRIVER', 'SMOKING_STATUS', 'IMMUNOTHERAPY']
 
 def create_stage_variable(df, stage_prefix):
     """
