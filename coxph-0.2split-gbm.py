@@ -171,10 +171,7 @@ def run_model(df, name):
 # Without treatment data
 surv = pd.read_csv('survival.csv')
 
-parameters = ["IMPACT_TMB_SCORE", "CLINICALLY_REPORTED_PD-L1_SCORE", "ALBUMIN", "DNLR", "AGE", "FRACTION_GENOME_ALTERED","ECOG"]
-
-# some unknown, some NA, some cigars
-surv.drop(columns= ["PACK-YEAR_HISTORY"], inplace=True)
+parameters = ["IMPACT_TMB_SCORE", "CLINICALLY_REPORTED_PD-L1_SCORE", "ALBUMIN", "DNLR", "AGE", "FRACTION_GENOME_ALTERED","ECOG", "PACK-YEAR_HISTORY"]
 
 surv = surv[parameters + ['PFS_MONTHS', 'PFS_STATUS']]
 
