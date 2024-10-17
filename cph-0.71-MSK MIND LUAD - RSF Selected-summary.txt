@@ -1,4 +1,4 @@
-                                      coef  exp(coef)  se(coef)  coef lower 95%  coef upper 95%  exp(coef) lower 95%  exp(coef) upper 95%  cmp to         z         p   -log2(p) significance
+                                     coef  exp(coef)  se(coef)  coef lower 95%  coef upper 95%  exp(coef) lower 95%  exp(coef) upper 95%  cmp to         z         p   -log2(p) significance
 covariate                                                                                                                                                                                   
 IMPACT_TMB_SCORE                -0.031994   0.968512  0.010504       -0.052581       -0.011407             0.948777             0.988658     0.0 -3.045951  0.002319   8.751997           **
 ALBUMIN                         -0.913588   0.401082  0.212288       -1.329666       -0.497511             0.264566             0.608042     0.0 -4.303526  0.000017  15.860309          ***
