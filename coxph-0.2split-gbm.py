@@ -104,7 +104,12 @@ def run_model(df, name):
     p_values = cph.summary['p']  # Extract p-values from the summary
 
     # Print Latex table, round to 2 decimal places
-    summary_df = summary_df.round(2)
+    summary_df = summary_df.round(3)
+    
+    # Round hazard ratios to 2 decimal places
+    summary_df['exp(coef)'] = summary_df['exp(coef)'].round(2)
+    summary_df['exp(coef) lower 95%'] = summary_df['exp(coef) lower 95%'].round(2)
+    summary_df['exp(coef) upper 95%'] = summary_df['exp(coef) upper 95%'].round(2)
     
     print(summary_df.info())
     

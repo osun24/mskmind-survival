@@ -101,7 +101,7 @@ def run_model(df, name):
     p_values = cph.summary['p']  # Extract p-values from the summary
 
     # Print Latex table, round to 2 decimal places
-    summary_df = summary_df.round(2)
+    summary_df = summary_df.round(3)
     
     print(summary_df.info())
     
