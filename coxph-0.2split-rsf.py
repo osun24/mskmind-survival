@@ -14,7 +14,7 @@ def dataframe_to_latex(df, caption="Table Caption", label="table:label"):
     - label: The label for referencing the table in LaTeX (optional)
     """
     # Start the LaTeX table environment
-    latex_str = "\\begin{table}[htbp]\n"
+    latex_str = "\\begin{table}[H]\n"
     latex_str += "\\centering\n"
     latex_str += f"\\caption{{{caption}}}\n"
     latex_str += f"\\label{{{label}}}\n"
@@ -26,6 +26,14 @@ def dataframe_to_latex(df, caption="Table Caption", label="table:label"):
     latex_str += " & ".join(df.columns) + " \\\\\n"
     latex_str += "\\hline\n"
 
+    # Make row values title case but keep driver names in all caps, like keep EGFR Driver
+    df['Covariate'] = df['Covariate'].str.title()
+    
+    for i in range(len(df)):
+        if 'Driver' in df['Covariate'][i]:
+            driverName = df['Covariate'][i].split(' ')[0].upper()
+            df['Covariate'][i] = driverName + ' Driver'
+        
     # Add table rows
     for _, row in df.iterrows():
         latex_str += " & ".join(map(str, row.values)) + " \\\\\n"
@@ -76,6 +84,9 @@ def run_model(df, name):
             return ""
 
     summary_df['significance'] = summary_df['p'].apply(significance_stars)
+    
+    # Sort summary_df by the coefficient values (ascending order)
+    summary_df = summary_df.sort_values(by='coef', ascending=False)
 
     print(summary_df)
 
@@ -85,13 +96,15 @@ def run_model(df, name):
     ll_ratio_test_df = cph.log_likelihood_ratio_test().degrees_freedom
     neg_log2_p_ll_ratio_test = -np.log2(cph.log_likelihood_ratio_test().p_value)
 
-    with open(f'cph-{concordance:.2f}-{name}-summary.txt', 'w') as f:
+    with open(f'cph-{c_index_test:.2f}-{name}-summary.txt', 'w') as f:
         f.write(summary_df.to_string())
         formatted_metrics = '\n'.join([f'{metric:.4f}' for metric in model_metrics])
         f.write(f"\n\nModel metrics: {formatted_metrics}")
         
         # Write additional metrics in the specified format
-        f.write(f"\n\nConcordance = {concordance:.2f}")
+        f.write(f"\n\nTrain Concordance = {concordance:.2f}")
+        # Test c-index
+        f.write(f"\nConcordance on test set = {c_index_test:.2f}")
         f.write(f"\nPartial AIC = {partial_aic:.2f}")
         f.write(f"\nlog-likelihood ratio test = {log_likelihood_ratio_test:.2f} on {ll_ratio_test_df} df")
         f.write(f"\n-log2(p) of ll-ratio test = {neg_log2_p_ll_ratio_test:.2f}")
@@ -99,9 +112,9 @@ def run_model(df, name):
     hazard_ratios = np.exp(cph.params_)  # Exponentiate the coefficients to get hazard ratios
     confidence_intervals = np.exp(cph.confidence_intervals_)  # Exponentiate confidence intervals
     p_values = cph.summary['p']  # Extract p-values from the summary
-
+    
     # Print Latex table, round to 2 decimal places
-    summary_df = summary_df.round(3)
+    summary_df = summary_df.round(2)
     
     print(summary_df.info())
     
@@ -136,7 +149,7 @@ def run_model(df, name):
     plt.figure(figsize=(12, 8))
 
     # Include lambda value in the title 
-    plt.title(f'{name} Hazard Ratios (Test Size: {test_size}, C-index: {c_index:.3f}, 95% CI)')
+    plt.title(f'{name} Hazard Ratios (Test Size: {test_size}, C-index: {c_index_test:.3f}, 95% CI)')
 
     # Generate a forest plot for hazard ratios with 95% confidence intervals
     plt.errorbar(sorted_hazard_ratios, range(len(sorted_hazard_ratios)), 
@@ -158,10 +171,11 @@ def run_model(df, name):
 
     # Adjust x-axis limits to ensure p-values are visible
     plt.xlim(left=min(sorted_hazard_ratios) / 2, right=x_pos * 1.15)
+
     # Display the plot
     plt.tight_layout()
     name = name.replace(' ', '-')
-    plt.savefig(f'cph-{c_index:.2f}-{name}-forest-plot.png')
+    plt.savefig(f'cph-{c_index_test:.2f}-{name}-forest-plot.png')
     plt.show()
 
 # Without treatment data

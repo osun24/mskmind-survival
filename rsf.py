@@ -19,7 +19,7 @@ def create_rsf(df, name, trees=1000):
     X_train, X_test, y_train, y_test = train_test_split(df[covariates], surv_data, test_size=test_size, random_state=42)
 
     # Fit the Random Survival Forest model
-    rsf = RandomSurvivalForest(n_estimators=trees, min_samples_split=10, min_samples_leaf=8, random_state=42)
+    rsf = RandomSurvivalForest(n_estimators=trees, min_samples_split=12, min_samples_leaf=5, random_state=42)
     rsf.fit(X_train, y_train)
 
     # Evaluate model performance
@@ -45,7 +45,10 @@ def create_rsf(df, name, trees=1000):
     importances_df = importances_df.sort_values(by="importances_mean", ascending=True)  # Ascending for better barh plot
 
     # Plot the feature importances
-    plt.figure(figsize=(20, 16))
+    plt.figure(figsize=(12, 8))
+    
+    # Increase font size
+    # plt.rcParams.update({'font.size': 14})
     plt.barh(importances_df.index, importances_df["importances_mean"], xerr=importances_df["importances_std"], color='skyblue')
     plt.xlabel("Permutation Importance")
     plt.ylabel("Feature")
@@ -58,5 +61,6 @@ def create_rsf(df, name, trees=1000):
 # Without treatment data
 surv = pd.read_csv('survival.csv')
 surv.drop(columns = ["PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB", "CURRENT_SMOKER", "FORMER_SMOKER", "NEVER_SMOKER"], inplace = True)
+surv.drop(columns = ["MET_DRIVER", "BRAF_DRIVER", "ARID1A_DRIVER"], inplace = True)
 
-create_rsf(surv, 'MSK MIND LUAD', 400)
+create_rsf(surv, 'MSK MIND LUAD', 550)

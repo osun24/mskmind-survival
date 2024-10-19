@@ -48,6 +48,7 @@ def run_trees(df, surv_data, covariates, name):
 # Load the dataset
 df = pd.read_csv('survival.csv')
 df.drop(columns = ["PEMBROLIZUMAB", "ATEZOLIZUMAB", "NIVOLUMAB", "CURRENT_SMOKER", "FORMER_SMOKER", "NEVER_SMOKER"], inplace = True)
+df.drop(columns = ["MET_DRIVER", "BRAF_DRIVER", "ARID1A_DRIVER"], inplace = True)
 
 # Create structured array for survival analysis
 surv_data = Surv.from_dataframe('PFS_STATUS', 'PFS_MONTHS', df)
