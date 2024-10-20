@@ -37,6 +37,13 @@ def dataframe_to_latex(df, caption="Table Caption", label="table:label"):
         
     # Add table rows
     for _, row in df.iterrows():
+        # Bold p-values less than 0.05, \textbf{ $\leq$ 0.001 } for p-values less than 0.001
+        if row['p'] < 0.001:
+            row['p'] = f"\\textbf{{ $\leq$ 0.001 }}"
+        elif row['p'] < 0.05:
+            row['p'] = f"\\textbf{{{round(row['p'], 3)}}}"
+        else: 
+            row['p'] = round(row['p'], 3)
         latex_str += " & ".join(map(str, row.values)) + " \\\\\n"
         # latex_str += "\\hline\n"
 
@@ -114,8 +121,10 @@ def run_model(df, name):
     confidence_intervals = np.exp(cph.confidence_intervals_)  # Exponentiate confidence intervals
     p_values = cph.summary['p']  # Extract p-values from the summary
     
-    # Print Latex table, round to 2 decimal places
-    summary_df = summary_df.round(2)
+    # Round hazard ratio and confidence interval values to 2 decimal places
+    summary_df['exp(coef)'] = summary_df['exp(coef)'].round(2)
+    summary_df['exp(coef) lower 95%'] = summary_df['exp(coef) lower 95%'].round(2)
+    summary_df['exp(coef) upper 95%'] = summary_df['exp(coef) upper 95%'].round(2)
     
     print(summary_df.info())
     

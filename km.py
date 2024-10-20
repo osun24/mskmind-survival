@@ -26,6 +26,7 @@ kmf.fit(T, event_observed=E)
 
 print(kmf.event_table)
 
+plt.rcParams.update({'font.size': 14})
 # Plot the Kaplan-Meier estimate
 plt.figure(figsize=(10, 6))
 kmf.plot_survival_function(ci_show=True)

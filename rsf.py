@@ -48,11 +48,11 @@ def create_rsf(df, name, trees=1000):
     plt.figure(figsize=(12, 8))
     
     # Increase font size
-    # plt.rcParams.update({'font.size': 14})
-    plt.barh(importances_df.index, importances_df["importances_mean"], xerr=importances_df["importances_std"], color='skyblue')
-    plt.xlabel("Permutation Importance")
+    plt.rcParams.update({'font.size': 14})
+    plt.barh(importances_df.index, importances_df["importances_mean"], xerr=importances_df["importances_std"], color=(9/255,117/255,181/255))
+    plt.xlabel("Permutation Feature Importance")
     plt.ylabel("Feature")
-    plt.title(f"{name} Feature Importances: {trees} Trees, {test_size} Test Size, C-index: {c_index[0]:.3f}")
+    plt.title(f"Random Survival Forest: Feature Importances (C-index: {c_index[0]:.3f})")
     plt.tight_layout()
     name = name.replace(' ', '-')
     plt.savefig(f'rsf-importances-{name}-{trees}trees-{test_size}testsize.png')
