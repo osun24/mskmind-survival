@@ -190,9 +190,9 @@ def run_model(df, name):
 # Without treatment data
 surv = pd.read_csv('survival.csv')
 
-parameters = ["ALBUMIN","CLINICALLY_REPORTED_PD-L1_SCORE", "PACK-YEAR_HISTORY", "DNLR", "IMPACT_TMB_SCORE", "AGE"]
+parameters = ["ALBUMIN","CLINICALLY_REPORTED_PD-L1_SCORE", "PACK-YEAR_HISTORY", "DNLR", "IMPACT_TMB_SCORE", "AGE", "FRACTION_GENOME_ALTERED", "ECOG", "EGFR_DRIVER", "ERBB2_DRIVER"]
 
 surv = surv[parameters + ['PFS_MONTHS', 'PFS_STATUS']]
 
 # Drop those with low variance
-run_model(surv, 'MSK MIND LUAD - GBM Selected Parameters')
+run_model(surv, 'MSKMIND - GBM 10')
