@@ -22,9 +22,8 @@ def create_corr(df, name):
     plt.tight_layout()
 
     name = name.replace(' ', '-')
-    plt.savefig(f'eda/correlation-all-{name}.png')
+    plt.savefig(f'eda/correlation-all-{name}-2.png')
     plt.show()
 
 surv = pd.read_csv('survival.csv')
-surv.drop(columns = ["PACK-YEAR_HISTORY"], inplace=True)
 create_corr(surv, 'MSK MIND LUAD')
