@@ -13,11 +13,22 @@ def create_rsf(df, name, trees=1000):
     surv_data = Surv.from_dataframe('PFS_STATUS', 'PFS_MONTHS', df)
     
     covariates = df.columns.difference(['PFS_STATUS', 'PFS_MONTHS'])
+    
+    # Identify binary columns (assuming these are already binary 0/1)
+    binary_columns = ['EGFR_DRIVER', 'STK11_DRIVER', 'ERBB2_DRIVER', 'IS_FEMALE'] 
+    df[binary_columns] = df[binary_columns].astype(int)
+    # print(df[binary_columns].describe())
+    continuous_columns = df.columns.difference(['PFS_STATUS', 'PFS_MONTHS', *binary_columns])
+    
+    # Check that binary columns are not scaled
+    for col in binary_columns:
+        assert df[col].max() <= 1 and df[col].min() >= 0, f"{col} should only contain binary values (0/1)."
 
     test_size = 0.2
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(df[covariates], surv_data, test_size=test_size, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(df[continuous_columns.union(binary_columns)], surv_data, test_size=test_size, random_state=42)
 
+    print(X_train.columns)
     # Fit the Random Survival Forest model
     rsf = RandomSurvivalForest(n_estimators=trees, min_samples_split=12, min_samples_leaf=5, random_state=42)
     rsf.fit(X_train, y_train)
