@@ -31,4 +31,4 @@ new_image.paste(image3, (0, height))
 new_image.paste(image4, (width, height))
 
 # Save the resulting image
-new_image.save('km_quad_SMOKE_IO_EGFR_STK11.png')
+new_image.save('km/km_quad_SMOKE_IO_EGFR_STK11.png')

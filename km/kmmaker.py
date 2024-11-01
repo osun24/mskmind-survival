@@ -94,7 +94,7 @@ def km_overall(df, duration_col, event_col):
     plt.grid(True)
     add_at_risk_counts(kmf)
     plt.tight_layout()
-    plt.savefig('MSKMETO-Overall-Kaplan-Meier.png')
+    plt.savefig('km/MSKMETO-Overall-Kaplan-Meier.png')
     plt.show()
     
 def main():
