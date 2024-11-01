@@ -9,6 +9,28 @@ import pandas as pd
 # Import RSF model
 rsf = joblib.load('rsf_model-550-c0.691.pkl')
 
+def calculate_survival_stats(survival_function):
+    # Extract times and corresponding survival probabilities
+    times = [t for t, s in survival_function]
+    probs = [s for t, s in survival_function]
+    
+    # Median survival time: the first time the probability drops to 0.5 or below
+    median_survival_time = next((time for time, prob in survival_function if prob <= 0.5), None)
+    
+    # If median survival time is still None, check for a sharp drop
+    if median_survival_time is None:
+        # Check if there's an immediate drop from initial probability to 0
+        if probs and probs[0] == 1 and probs[-1] == 0:
+            median_survival_time = times[-1]  # Use last time as the drop point
+        elif times:
+            median_survival_time = max(times)  # Fallback to max time
+    
+    # Minimum and maximum survival times (based on time points where survival is > 0)
+    min_survival_time = min(times) if times else "N/A"
+    max_survival_time = max(times) if times else "N/A"
+    
+    return min_survival_time, median_survival_time, max_survival_time
+
 def build_graph(tree_, node_id, G, feature_names, root_fixed=False):
     node_id = int(node_id)  # Ensure node_id is a native Python int
 
@@ -42,14 +64,15 @@ def build_graph(tree_, node_id, G, feature_names, root_fixed=False):
         value_mean = np.mean(value)
         value_median = np.median(value)
         value_count = np.sum(tree_.n_node_samples[node_id])
-
+        
         # Use the custom colormap to assign colors based on the mean value
         cmap = red_to_black
         norm_value = (value_mean - global_min) / (global_max - global_min)  # Normalize
         color = cm.colors.to_hex(cmap(norm_value))  # Convert color to hex for pyvis
 
         # Set the label with mean and median values
-        label = f"Leaf node\nMean: {value_mean:.2f}\nMedian: {value_median:.2f}\nCount: {value_count}"
+        min_surv, median_surv, max_surv = calculate_survival_stats(value)
+        label = f"Leaf node\nMin: {min_surv:.2f}\nMedian: {median_surv:.2f}\nMax: {max_surv:.2f}\nCount: {value_count}"
         title = f"Full Value List: {value}"
 
         # Add the node with the calculated color
@@ -73,7 +96,7 @@ def build_graph(tree_, node_id, G, feature_names, root_fixed=False):
         build_graph(tree_, right_child, G, feature_names, root_fixed)
 
 # Select a tree to visualize (e.g., the first tree)
-tree = rsf.estimators_[112]
+tree = rsf.estimators_[0]
 
 # Build the graph
 G = nx.DiGraph()
@@ -109,7 +132,7 @@ if len(G.nodes) == 0:
     print("The graph is empty. Please check the tree structure.")
 else:
     # Create an interactive network visualization
-    net = Network(height='750px', width='100%', directed=True)
+    net = Network(height='1600px', width='100%', directed=True)
 
     # Enable physics so nodes move dynamically with others when dragged
     net.barnes_hut()
@@ -143,7 +166,7 @@ else:
         "barnesHut": {
           "gravitationalConstant": -6000,
           "centralGravity": 0.1,
-          "springLength": 30,
+          "springLength": 40,
           "springConstant": 0.04
         }
       },

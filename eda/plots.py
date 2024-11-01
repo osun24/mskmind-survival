@@ -117,6 +117,8 @@ def info():
     print("Number of patients with PFS_STATUS == 1:", df['PFS_STATUS'].sum())
     print("Number of patients with PFS_STATUS == 0:", df.shape[0] - df['PFS_STATUS'].sum())
     
+    # albumin 
+    print(f"Minimum Albumin: {df['ALBUMIN'].min()}, Median Albumin: {df['ALBUMIN'].median()}, Maximum Albumin: {df['ALBUMIN'].max()}")
     # Age
     print(f"Minimum Age: {df['AGE'].min()}, Median Age: {df['AGE'].median()}, Maximum Age: {df['AGE'].max()}")
     
@@ -139,6 +141,8 @@ def info():
     # TMB
     print(f"Minimum TMB Score: {df['IMPACT_TMB_SCORE'].min()}, Median TMB Score: {df['IMPACT_TMB_SCORE'].median()}, Maximum TMB Score: {df['IMPACT_TMB_SCORE'].max()}")
     
+    #Fraction genome altered
+    print(f"Minimum Fraction Genome Altered: {df['FRACTION_GENOME_ALTERED'].min()}, Median Fraction Genome Altered: {df['FRACTION_GENOME_ALTERED'].median()}, Maximum Fraction Genome Altered: {df['FRACTION_GENOME_ALTERED'].max()}")
 #make_plots(demographic_variables, "eda/EDA Demographic Plots - MSKMIND")
 #make_plots(clinical_variables, "eda/EDA Clinical Plots - MSKMIND")
 #make_plots(genomic_variables, "eda/EDA Genomic Plots - MSKMIND")
