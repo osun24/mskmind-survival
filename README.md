@@ -1,6 +1,6 @@
 # Clinical and Genomic Biomarkers for Progression-Free Survival in Non-Small Cell Lung Cancer: A Machine Learning Approach
 
-**Paper:**
+**Paper:** https://ojs.zefr.org/index.php/intplanet/article/view/18/17
 
 # Supplementary Figures
 ## Kaplan-Meier Curves by Parameter
